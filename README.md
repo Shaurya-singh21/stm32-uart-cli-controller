@@ -1,53 +1,80 @@
-# 🧰 STM32 UART Command Line Interface (CLI)
+# STM32 UART CLI — LED Control, PWM & Timer Blinking
 
-![STM32](https://img.shields.io/badge/Hardware-STM32_Nucleo_F446RE-blue)
-![Language](https://img.shields.io/badge/Language-Embedded_C-green)
-![IDE](https://img.shields.io/badge/IDE-STM32CubeIDE-orange)
-
-A lightweight, non-blocking **Command Line Interface (CLI)** built on the STM32 Nucleo-F446RE. This project demonstrates how to control hardware peripherals (PWM, Timers, GPIO) dynamically via a serial terminal, using interrupt-driven architecture to ensure the CPU remains efficient.
+This project implements a fully functional Command Line Interface (CLI) on an STM32 Nucleo-F446RE board using UART communication.  
+The CLI allows controlling the on-board LED using PWM brightness control and timer-based blinking — all in real-time through a serial terminal.
 
 ---
 
-## ✅ Features
-* **Real-time UART Parsing:** Custom string parser handles commands without blocking the main loop.
-* **Interrupt-Driven RX:** Uses `HAL_UART_Receive_IT` to capture data asynchronously.
-* **Dual Mode LED Control:**
-    * **PWM Mode:** Adjusts brightness (0-100%) using hardware Timer PWM (TIM2).
-    * **Blink Mode:** Toggles LED with precise millisecond periods using Timer Interrupts (TIM7).
-* **Robust Error Handling:** Detects invalid commands, out-of-range values, and parsing errors.
+## ✨ Features
+- Interactive UART CLI (115200 baud)
+- Non-blocking UART receive using interrupts
+- PWM-based LED brightness control (Timer2 Channel1)
+- Timer interrupt based LED blinking (Timer7)
+- Mode switching between:
+  - IDLE Mode
+  - PWM Mode
+  - BLINK Mode
+- Proper input validation + error messages
+- Clean architecture + readable code
 
 ---
 
-## ⚙️ Hardware & Tools
-* **Board:** STM32 Nucleo-F446RE (ARM Cortex-M4)
-* **Actuators:** User LED (Connected to PA5)
-* **Communication:** UART2 (Connected via USB ST-Link)
-* **Software:** STM32CubeIDE, HAL Library
-* **Terminal:** PuTTY / TeraTerm / Serial Monitor
+## 🧑‍💻 Supported Commands
+
+| Command | Description |
+|--------|-------------|
+| `HELP` | Show command list |
+| `SET PWM <10..100>` | Set LED brightness in % (multiples of 10) |
+| `SET BLINK <10..2000>` | Blink LED with specified period (ms) |
+| `STATUS` | Show current system mode and parameters |
+| `IDLE` | Stop everything and turn LED OFF |
 
 ---
 
-## 🖥️ CLI Commands
-Connect your serial terminal at **115200 baud** to interact with the board.
+## 🛠️ Technical Highlights
+- UART: `USART2`
+- PWM Timer: `TIM2` (PA5 - LED pin using AF1)
+- Blink Timer: `TIM7` periodic interrupt
+- Uses:
+  - `HAL_UART_Receive_IT`
+  - `HAL_GPIO_EXTI_Callback`
+  - `HAL_TIM_PeriodElapsedCallback`
+  - `HAL_TIM_PWM_Start`
+- Fully interrupt-driven (no blocking loops)
 
-| Command | Arguments | Description | Example |
-| :--- | :--- | :--- | :--- |
-| **`HELP`** | None | Displays the list of available commands. | `HELP` |
-| **`SET PWM`** | `10` - `100` | Sets LED brightness %. Only multiples of 10 allowed. | `SET PWM 50` |
-| **`SET BLINK`** | `10` - `2000` | Sets LED blinking period in milliseconds. | `SET BLINK 500` |
-| **`STATUS`** | None | Prints current system mode (PWM/Blink) and active values. | `STATUS` |
-| **`IDLE`** | None | Stops all timers and turns the LED off. | `IDLE` |
+---
 
-### Example Session
-```text
-> HELP
-... (Command List) ...
+---
 
-> SET PWM 80
-PWM Set to 80%
+## 📦 Memory Footprint
+Approx Flash Usage:
+- ~20–25 KB (depends on build)
 
-> SET BLINK 100
-Blinking at 100ms
+---
 
-> STATUS
-System: BLINKING (Period: 100 ms)
+## ✔️ Target Board
+- STM32 Nucleo F446RE
+
+---
+
+## 🎯 Purpose
+This project builds confidence in:
+- UART
+- Timers
+- Interrupts
+- PWM
+- Embedded CLI design
+- Real firmware structuring
+
+Perfect for learning + interviews + lab submission.
+
+---
+
+## 📜 License
+Free to use for learning and development.
+
+
+## 🖥️ How To Use
+1️⃣ Connect board  
+2️⃣ Open serial terminal (115200 baud)  
+3️⃣ Type commands like:
