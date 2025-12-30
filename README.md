@@ -1,115 +1,59 @@
-🧰 STM32 UART Command Line Interface (CLI) Project
+# 🧰 STM32 UART Command Line Interface (CLI)
 
-A lightweight UART-based Command Line Interface built on STM32 (Nucleo F446RE) that allows controlling LED modes, PWM brightness, and timer-based blinking directly from a serial terminal.
-This project strengthens understanding of GPIO, PWM, Timers, Interrupts, and UART RX (Interrupt Mode) while demonstrating real embedded firmware structuring and parsing.
+![STM32](https://img.shields.io/badge/Hardware-STM32_Nucleo_F446RE-blue)
+![Language](https://img.shields.io/badge/Language-Embedded_C-green)
+![IDE](https://img.shields.io/badge/IDE-STM32CubeIDE-orange)
 
-✅ Features
+A lightweight, non-blocking **Command Line Interface (CLI)** built on the STM32 Nucleo-F446RE. This project demonstrates how to control hardware peripherals (PWM, Timers, GPIO) dynamically via a serial terminal, using interrupt-driven architecture to ensure the CPU remains efficient.
 
-UART-based command interface
+## 📸 Screenshots
+| **CLI in Action** | **Pinout Configuration** |
+|:---:|:---:|
+| <img src="cli_output.png" width="400" alt="CLI Output"> | <img src="pinout.png" width="400" alt="STM32 Pinout"> |
+*(Replace `cli_output.png` and `pinout.png` with your actual image files)*
 
-Non-blocking UART reception using interrupts
+---
 
-Supports:
+## ✅ Features
+* **Real-time UART Parsing:** Custom string parser handles commands without blocking the main loop.
+* **Interrupt-Driven RX:** Uses `HAL_UART_Receive_IT` to capture data asynchronously.
+* **Dual Mode LED Control:**
+    * **PWM Mode:** Adjusts brightness (0-100%) using hardware Timer PWM (TIM2).
+    * **Blink Mode:** Toggles LED with precise millisecond periods using Timer Interrupts (TIM7).
+* **Robust Error Handling:** Detects invalid commands, out-of-range values, and parsing errors.
 
-LED PWM brightness control
+---
 
-LED blinking using timers
+## ⚙️ Hardware & Tools
+* **Board:** STM32 Nucleo-F446RE (ARM Cortex-M4)
+* **Actuators:** User LED (Connected to PA5)
+* **Communication:** UART2 (Connected via USB ST-Link)
+* **Software:** STM32CubeIDE, HAL Library
+* **Terminal:** PuTTY / TeraTerm / Serial Monitor
 
-Idle mode
+---
 
-System status reporting
+## 🖥️ CLI Commands
+Connect your serial terminal at **115200 baud** to interact with the board.
 
-Input validation and error handling
+| Command | Arguments | Description | Example |
+| :--- | :--- | :--- | :--- |
+| **`HELP`** | None | Displays the list of available commands. | `HELP` |
+| **`SET PWM`** | `10` - `100` | Sets LED brightness %. Only multiples of 10 allowed. | `SET PWM 50` |
+| **`SET BLINK`** | `10` - `2000` | Sets LED blinking period in milliseconds. | `SET BLINK 500` |
+| **`STATUS`** | None | Prints current system mode (PWM/Blink) and active values. | `STATUS` |
+| **`IDLE`** | None | Stops all timers and turns the LED off. | `IDLE` |
 
-Clean command parsing
-
-Beginner-friendly but industry-style logic
-
-🖥️ CLI Commands
-HELP
-    Show available commands
-
-SET PWM <10,20,...,100>
-    Set LED brightness (%) using PWM
-    Only multiples of 10 allowed
-
-SET BLINK <ms>
-    Blink LED using timer
-    Range: 10ms – 2000ms
-
-STATUS
-    Show current operating mode + parameters
-
-IDLE
-    Stop PWM / Timer and turn LED OFF
-
-
-Example Usage:
-
+### Example Session
+```text
 > HELP
-> SET PWM 50
+... (Command List) ...
+
+> SET PWM 80
+PWM Set to 80%
+
+> SET BLINK 100
+Blinking at 100ms
+
 > STATUS
-> SET BLINK 500
-> IDLE
-
-
-Wrong command?
-
-Error: Unknown command Type HELP
-
-
-Invalid values?
-
-wrong values
-
-⚙️ Hardware & Tools
-
-STM32 Nucleo-F446RE (or compatible STM32 board)
-
-USB connection
-
-Serial terminal (115200 baud)
-
-PuTTY / TeraTerm / Serial Monitor
-
-🧩 Core Concepts Practiced
-
-GPIO Output
-
-Timer Base + Interrupt
-
-PWM Generation
-
-UART RX Interrupt Mode
-
-ISR discipline + state handling
-
-Embedded parsing logic
-
-HAL APIs:
-
-HAL_UART_Receive_IT
-
-HAL_UART_RxCpltCallback
-
-HAL_TIM_Base_Start_IT
-
-HAL_TIM_PWM_Start
-
-__HAL_TIM_SET_COMPARE
-
-🏗️ Build & Run
-
-1️⃣ Flash code via STM32CubeIDE
-2️⃣ Open Serial Terminal at 115200 baud
-3️⃣ Reset board
-4️⃣ Type HELP to begin
-
-📦 Memory Footprint
-
-Approx Firmware Size:
-
-~21 KB Flash (depends slightly on build config)
-
-
-Comfortably fits STM32F4 flash.
+System: BLINKING (Period: 100 ms)
