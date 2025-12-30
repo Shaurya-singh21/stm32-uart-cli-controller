@@ -6,12 +6,6 @@
 
 A lightweight, non-blocking **Command Line Interface (CLI)** built on the STM32 Nucleo-F446RE. This project demonstrates how to control hardware peripherals (PWM, Timers, GPIO) dynamically via a serial terminal, using interrupt-driven architecture to ensure the CPU remains efficient.
 
-## 📸 Screenshots
-| **CLI in Action** | **Pinout Configuration** |
-|:---:|:---:|
-| <img src="cli_output.png" width="400" alt="CLI Output"> | <img src="pinout.png" width="400" alt="STM32 Pinout"> |
-*(Replace `cli_output.png` and `pinout.png` with your actual image files)*
-
 ---
 
 ## ✅ Features
